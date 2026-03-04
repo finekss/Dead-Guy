@@ -2,6 +2,7 @@
 using __GAME__.Source.Game.Gameplay.Root;
 using __GAME__.Source.Game.MainMenu.Root;
 using __GAME__.Source.Utils;
+using R3;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -39,7 +40,7 @@ namespace __GAME__.Source.Game.GameRoot
             
             if (sceneName == Scenes.GAMEPLAY)
             {
-                _coroutines.StartCoroutine(LoadAndStartMainMenu());
+                _coroutines.StartCoroutine(LoadAndStartGameplay());
                 return; 
             }
 
@@ -57,7 +58,7 @@ namespace __GAME__.Source.Game.GameRoot
             _coroutines.StartCoroutine(LoadAndStartMainMenu());
         }
 
-        private IEnumerator LoadAndStartGameplay()
+        private IEnumerator LoadAndStartGameplay(GameplayEntryParams entryParams = null)
         {
             _uiRoot.ShowLoadingScreen();
             
@@ -66,17 +67,15 @@ namespace __GAME__.Source.Game.GameRoot
             yield return null;
 
             var sceneEntryPoint = Object.FindFirstObjectByType<GameplayEntryPoint>();
-            sceneEntryPoint.Run(_uiRoot);
-
-            sceneEntryPoint.GotoMainMenuRequested += () =>
+            sceneEntryPoint.Run(_uiRoot, entryParams).Subscribe(gameplayExitParams =>
             {
-                _coroutines.StartCoroutine(LoadAndStartMainMenu());
-            };
+                _coroutines.StartCoroutine(LoadAndStartMainMenu(gameplayExitParams.MainMenuEntryParams));
+            });
             
             _uiRoot.HideLoadingScreen();
         }
         
-        private IEnumerator LoadAndStartMainMenu()
+        private IEnumerator LoadAndStartMainMenu(MainMenuEntryParams entryParams = null)
         {
             _uiRoot.ShowLoadingScreen();
             
@@ -85,7 +84,7 @@ namespace __GAME__.Source.Game.GameRoot
             yield return null;
 
             var sceneEntryPoint = Object.FindFirstObjectByType<MainMenuEntryPoint>();
-            sceneEntryPoint.Run(_uiRoot);
+            sceneEntryPoint.Run(_uiRoot, entryParams);
             
             sceneEntryPoint.GotoGameplayRequested += () =>
             {

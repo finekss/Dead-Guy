@@ -10,7 +10,7 @@ namespace __GAME__.Source.Game.MainMenu.Root
         [SerializeField] private UIMainMenuRootBinder _sceneUIRootPrefab;
         
         public event Action GotoGameplayRequested;
-        public void Run(UIRootView uiRoot)
+        public void Run(UIRootView uiRoot, MainMenuEntryParams entryParams)
         {
             var uiScene = Instantiate(_sceneUIRootPrefab);
             uiRoot.AttachSceneUI(uiScene.gameObject);
