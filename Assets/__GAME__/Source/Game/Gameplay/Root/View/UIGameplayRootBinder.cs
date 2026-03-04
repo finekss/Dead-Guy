@@ -1,5 +1,4 @@
-﻿using System;
-using R3;
+﻿using R3;
 using UnityEngine;
 
 namespace __GAME__.Source.Game.Gameplay.Root.View

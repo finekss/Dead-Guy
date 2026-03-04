@@ -973,7 +973,7 @@ MonoBehaviour:
       - m_Target: {fileID: 2056756867749335175}
         m_TargetAssemblyTypeName: __GAME__.Source.Game.MainMenu.Root.View.UIMainMenuRootBinder,
           Assembly-CSharp
-        m_MethodName: HandleGotoGameplayClicked
+        m_MethodName: HandleGotoMainMenuClicked
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
