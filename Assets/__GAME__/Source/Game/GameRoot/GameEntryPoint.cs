@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using __GAME__.Source.Game.Gameplay.Root;
+using __GAME__.Source.Game.MainMenu.Root;
 using __GAME__.Source.Utils;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -38,8 +39,13 @@ namespace __GAME__.Source.Game.GameRoot
             
             if (sceneName == Scenes.GAMEPLAY)
             {
-                _coroutines.StartCoroutine(LoadAndStartGameplay());
+                _coroutines.StartCoroutine(LoadAndStartMainMenu());
                 return; 
+            }
+
+            if (sceneName == Scenes.MAINMENU)
+            {
+                _coroutines.StartCoroutine(LoadAndStartMainMenu());
             }
 
             if (sceneName != Scenes.BOOT)
@@ -48,7 +54,7 @@ namespace __GAME__.Source.Game.GameRoot
             }
 #endif
 
-            _coroutines.StartCoroutine(LoadAndStartGameplay());
+            _coroutines.StartCoroutine(LoadAndStartMainMenu());
         }
 
         private IEnumerator LoadAndStartGameplay()
@@ -60,7 +66,31 @@ namespace __GAME__.Source.Game.GameRoot
             yield return null;
 
             var sceneEntryPoint = Object.FindFirstObjectByType<GameplayEntryPoint>();
-            sceneEntryPoint.Run();
+            sceneEntryPoint.Run(_uiRoot);
+
+            sceneEntryPoint.GotoMainMenuRequested += () =>
+            {
+                _coroutines.StartCoroutine(LoadAndStartMainMenu());
+            };
+            
+            _uiRoot.HideLoadingScreen();
+        }
+        
+        private IEnumerator LoadAndStartMainMenu()
+        {
+            _uiRoot.ShowLoadingScreen();
+            
+            yield return LoadScene(Scenes.BOOT);
+            yield return LoadScene(Scenes.MAINMENU);
+            yield return null;
+
+            var sceneEntryPoint = Object.FindFirstObjectByType<MainMenuEntryPoint>();
+            sceneEntryPoint.Run(_uiRoot);
+            
+            sceneEntryPoint.GotoGameplayRequested += () =>
+            {
+                _coroutines.StartCoroutine(LoadAndStartGameplay());
+            };
             
             _uiRoot.HideLoadingScreen();
         }
