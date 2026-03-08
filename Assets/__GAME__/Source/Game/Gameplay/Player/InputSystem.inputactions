@@ -1,0 +1,121 @@
+{
+    "version": 1,
+    "name": "InputSystem",
+    "maps": [
+        {
+            "name": "Player",
+            "id": "270e05b5-191c-4cb6-9338-1dcbb703ec99",
+            "actions": [
+                {
+                    "name": "Move",
+                    "type": "Value",
+                    "id": "4e1debe4-8753-4842-abce-24aaa1afa663",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Sprint",
+                    "type": "Button",
+                    "id": "5dafba71-ec3c-4b94-8020-b589de3e8cdd",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "6e2a7008-b2c6-4554-8802-3d663a793f65",
+                    "path": "<Gamepad>/leftStick",
+                    "interactions": "Hold",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "2D Vector",
+                    "id": "a50f164b-fe9b-4232-9217-c9752199ac95",
+                    "path": "2DVector",
+                    "interactions": "Hold",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "up",
+                    "id": "3c655b6f-9b62-45e5-93a4-2bbfad0bd05c",
+                    "path": "<Keyboard>/w",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "down",
+                    "id": "83003f90-c975-46c2-b9ef-349d406d7fb1",
+                    "path": "<Keyboard>/s",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "left",
+                    "id": "2f3f41e4-15a1-411e-9966-49d99ace880a",
+                    "path": "<Keyboard>/a",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "right",
+                    "id": "8712b21a-f6a0-4c67-aca0-4310a0ddc217",
+                    "path": "<Keyboard>/d",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "9b2ef489-fa7e-4dfe-912a-0995d7a89885",
+                    "path": "<Keyboard>/leftShift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Sprint",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "be67e5cf-472c-432a-ac39-4434ea2879d0",
+                    "path": "<Gamepad>/leftStickPress",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Sprint",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
