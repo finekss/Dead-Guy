@@ -1,33 +1,26 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace __GAME__.Source.Game.Gameplay.Player
 {
     public class UnityInputSystem : MonoBehaviour
     { 
-        public GameObject _player;
-        
         private IControllable _controllable;
         private InputSystem _input;
         
-        private Vector2 direction;
-
+        private Vector2 _direction;
+        private bool _isSprinting;
 
         private void Awake()
         {
             _input = new InputSystem();
         }
-        private void Start()
-        {
-            if(_player == null) throw new NullReferenceException("Player is null");
-            _controllable = _player.GetComponent<IControllable>();
-            if(_controllable == null) throw new NullReferenceException("IControllable is null");
-        }
 
-        private void OnEnable()
-        {
+        public void Init(IControllable controllable)
+        {   
+            _controllable = controllable;
             _input.Enable();
         }
+
         private void OnDisable()
         {
             _input.Disable();
@@ -35,14 +28,20 @@ namespace __GAME__.Source.Game.Gameplay.Player
 
         private void Update()
         {
-            Movement();
+            if (_controllable == null) return;
+
+            _direction = _input.Player.Move.ReadValue<Vector2>();
+            _isSprinting = _input.Player.Sprint.IsPressed();
+
+            if (_input.Player.Attack.IsPressed())
+                _controllable.Attack();
         }
-        
-        private void Movement()
+
+        private void FixedUpdate()
         {
-            direction = _input.Player.Move.ReadValue<Vector2>();
-            if (_input.Player.Sprint.IsPressed()) _controllable.Move(direction, true);
-            else _controllable.Move(direction, false);
+            if (_controllable == null) return;
+
+            _controllable.Move(_direction, _isSprinting);
         }
     }
 }

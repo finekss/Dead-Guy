@@ -1,4 +1,5 @@
-﻿using __GAME__.Source.Game.Gameplay.Root.View;
+﻿using __GAME__.Source.Game.Gameplay.Player;
+using __GAME__.Source.Game.Gameplay.Root.View;
 using __GAME__.Source.Game.GameRoot;
 using __GAME__.Source.Game.MainMenu.Root;
 using BaCon;
@@ -10,6 +11,9 @@ namespace __GAME__.Source.Game.Gameplay.Root
     public class GameplayEntryPoint: MonoBehaviour
     {
         [SerializeField] private UIGameplayRootBinder _sceneUIRootPrefab;
+        [SerializeField] private GameObject _characterPrefab;
+        [SerializeField] private GameObject _inputSystemPrefab;
+        
         
         public Observable<GameplayExitParams> Run(DIContainer gameplayContainer, GameplayEntryParams entryParams)
         {
@@ -23,8 +27,28 @@ namespace __GAME__.Source.Game.Gameplay.Root
             var mainMenuEnterParams = new MainMenuEntryParams(true);
             var exitParams = new GameplayExitParams(mainMenuEnterParams);
             var exitToMainMenuSceneSignal = exitSceneSignalSubject.Select(_ => exitParams);
+
+            InitPlayer(gameplayContainer);
             
             return exitToMainMenuSceneSignal;
+        }
+
+        private void InitPlayer(DIContainer gameplayContainer)
+        {
+            gameplayContainer.RegisterFactory(c => new CharacterModel()).AsSingle();
+
+            var characterObject = Instantiate(_characterPrefab, Vector3.zero, Quaternion.identity);
+            var characterView = characterObject.GetComponent<CharacterView>();
+            gameplayContainer.RegisterInstance(characterView);
+
+            gameplayContainer.RegisterFactory(c =>
+                new CharacterPresenter(c.Resolve<CharacterView>(), c.Resolve<CharacterModel>())).AsSingle();
+
+            var characterPresenter = gameplayContainer.Resolve<CharacterPresenter>();
+            
+            var inputObject = Instantiate(_inputSystemPrefab, Vector3.zero, Quaternion.identity);
+            var inputSystem = inputObject.GetComponent<UnityInputSystem>();
+            inputSystem.Init(characterPresenter);
         }
     }
 }
