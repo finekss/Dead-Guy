@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace __GAME__.Source.Game.Gameplay.Player
 {
@@ -9,6 +10,11 @@ namespace __GAME__.Source.Game.Gameplay.Player
         
         private Vector2 _direction;
         private bool _isSprinting;
+        private bool _wasAttacking;
+
+        private InputAction _interactAction;
+        private InputAction _reloadAction;
+        private InputAction _switchWeaponAction;
 
         private void Awake()
         {
@@ -19,6 +25,10 @@ namespace __GAME__.Source.Game.Gameplay.Player
         {   
             _controllable = controllable;
             _input.Enable();
+
+            _interactAction = _input.FindAction("Player/Interact");
+            _reloadAction = _input.FindAction("Player/Reload");
+            _switchWeaponAction = _input.FindAction("Player/SwitchWeapon");
         }
 
         private void OnDisable()
@@ -33,8 +43,21 @@ namespace __GAME__.Source.Game.Gameplay.Player
             _direction = _input.Player.Move.ReadValue<Vector2>();
             _isSprinting = _input.Player.Sprint.IsPressed();
 
-            if (_input.Player.Attack.IsPressed())
-                _controllable.Attack();
+            bool isAttacking = _input.Player.Attack.IsPressed();
+            if (isAttacking && !_wasAttacking)
+                _controllable.StartAttack();
+            else if (!isAttacking && _wasAttacking)
+                _controllable.StopAttack();
+            _wasAttacking = isAttacking;
+
+            if (_interactAction != null && _interactAction.WasPressedThisFrame())
+                _controllable.Interact();
+
+            if (_reloadAction != null && _reloadAction.WasPressedThisFrame())
+                _controllable.Reload();
+
+            if (_switchWeaponAction != null && _switchWeaponAction.WasPressedThisFrame())
+                _controllable.SwitchWeapon();
         }
 
         private void FixedUpdate()

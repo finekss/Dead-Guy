@@ -12,9 +12,5 @@ namespace __GAME__.Source.Game.Gameplay.Player
         {   
             return new Vector3(direction.x, 0, direction.y).normalized;
         }
-
-        public void Attack()
-        {
-        }
     }
 }
